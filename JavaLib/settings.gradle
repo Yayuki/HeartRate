@@ -1,0 +1,5 @@
+rootProject.name = 'JavaLib'
+include 'protobuf'
+include 'common'
+include 'common-netty'
+

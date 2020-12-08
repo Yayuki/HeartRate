@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package yayuki.heartrate.net.protobuf;
+
+message Key {
+    enum Algorithm {
+        UNKNOWN = 0;
+        RSA = 1;
+        AES = 2;
+    }
+
+    Algorithm algorithm = 1;
+    bytes value = 2;
+}

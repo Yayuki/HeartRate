@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package yayuki.heartrate.net.protobuf;
+import "yayuki/heartrate/net/protobuf/UserProto.proto";
+
+message CarerExtra {
+    int32 patientCount = 1;
+    repeated User patients = 2;
+}

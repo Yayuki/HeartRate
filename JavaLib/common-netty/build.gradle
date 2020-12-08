@@ -1,0 +1,6 @@
+version '1.0'
+
+dependencies {
+    compileOnly "io.netty:netty-all:4.1.53.Final"
+    compileOnly 'com.google.protobuf:protobuf-java:3.13.0'
+}

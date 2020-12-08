@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package yayuki.heartrate.net.protobuf;
+
+import "google/protobuf/any.proto";
+import "yayuki/heartrate/net/protobuf/UserProto.proto";
+import "yayuki/heartrate/net/protobuf/PatientProto.proto";
+import "yayuki/heartrate/net/protobuf/CarerProto.proto";
+
+message Credentials {
+    string account = 1;
+    string password = 2;
+}
+
+message Request {
+    enum Status {
+        UNKNOWN = 0;
+        PATIENT = 1;
+        CARER = 2;
+    }
+
+    Status status = 1;
+    oneof auth_type {
+        Credentials credentials = 2;
+        bytes token = 3;
+    }
+}
+
+message Result {
+    int32 retCode = 1;
+    User user = 2;
+    oneof extra {
+        CarerExtra carer_extra = 3;
+        PatientExtra patient_extra = 4;
+    }
+}

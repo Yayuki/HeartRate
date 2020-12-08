@@ -1,0 +1,20 @@
+plugins {
+    id 'java-library'
+    id 'kotlin'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compileOnly 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2'
+    compileOnly project(":common")
+    compileOnly project(":common-client")
+    compileOnly "io.netty:netty-all:${netty_version}.Final"
+    compileOnly 'com.google.protobuf:protobuf-java:3.13.0'
+    compileOnly files('../../JavaLib/lib/protobuf-1.0.jar')
+    compileOnly files('../../JavaLib/lib/common-netty-1.0.jar')
+}

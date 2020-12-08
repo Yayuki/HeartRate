@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package yayuki.heartrate.net.protobuf;
+
+import "yayuki/heartrate/net/protobuf/LoginProto.proto";
+import "yayuki/heartrate/net/protobuf/PatientProto.proto";
+
+message Frame {
+    oneof type {
+        Result login_result = 1;
+        State state = 2;
+    }
+}

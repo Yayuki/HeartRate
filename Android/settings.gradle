@@ -1,0 +1,12 @@
+include ':app'
+include ':app:user'
+include ':app:carer'
+include ':app:patient'
+include ':common'
+include ':common-client'
+include ':common-carer'
+include ':common-patient'
+include ':netty-client'
+include ':netty-carer'
+include ':netty-patient'
+rootProject.name = "HeartRate"

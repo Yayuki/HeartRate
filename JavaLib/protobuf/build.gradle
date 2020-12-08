@@ -1,0 +1,24 @@
+apply plugin: 'com.google.protobuf'
+
+version '1.0'
+
+sourceSets.main.java.srcDirs += 'build/generated/source/proto/main/java'
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.12.0'
+    }
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.12'
+    }
+}
+
+dependencies {
+    compileOnly 'com.google.protobuf:protobuf-java:3.13.0'
+}
