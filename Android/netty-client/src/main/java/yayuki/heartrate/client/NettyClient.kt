@@ -6,16 +6,20 @@ import io.netty.channel.*
 import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.SocketChannel
 import io.netty.channel.socket.nio.NioSocketChannel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import yayuki.heartrate.MyResult
 import yayuki.heartrate.client.data.ClientState
 import yayuki.heartrate.client.error.ClientErrorCode
 import yayuki.heartrate.netty.handler.CustomProtobufDecoder
 import yayuki.heartrate.netty.handler.CustomProtobufEncoder
+import java.net.InetSocketAddress
 import kotlinx.coroutines.channels.Channel as KTChannel
 
 
@@ -34,29 +38,36 @@ open class NettyClient : Client {
     @Synchronized
     override suspend fun connect(hostname: String, port: Int): MyResult<Unit> {
         if (channel?.isActive == true) return MyResult.Success(Unit)
+
         println("start connect")
         _state.value = ClientState.CONNECTING
-        val bootstrap = Bootstrap()
-        val group = NioEventLoopGroup()
-        bootstrap.group(group)
-        bootstrap.channel(NioSocketChannel::class.java)
-        bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 8000)
-        bootstrap.option(ChannelOption.SO_KEEPALIVE, true)
-        bootstrap.handler(object : ChannelInitializer<SocketChannel>() {
-            @Throws(Exception::class)
-            override fun initChannel(ch: SocketChannel) {
-                initPipeline(ch.pipeline())
+        try {
+            GlobalScope.launch(Dispatchers.IO) {
+                val bootstrap = Bootstrap()
+                val group = NioEventLoopGroup()
+                bootstrap.group(group)
+                bootstrap.channel(NioSocketChannel::class.java)
+                bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 8000)
+                bootstrap.option(ChannelOption.SO_KEEPALIVE, true)
+                bootstrap.handler(object : ChannelInitializer<SocketChannel>() {
+                    @Throws(Exception::class)
+                    override fun initChannel(ch: SocketChannel) {
+                        initPipeline(ch.pipeline())
+                    }
+                })
+                bootstrap.connect(InetSocketAddress(hostname, port)).addListener(connectListener)
+                    .channel().closeFuture().addListener(closeListener)
             }
-        })
-        bootstrap.connect(hostname, port).addListener(connectListener)
-            .channel().closeFuture().addListener(closeListener)
-        connectChannel = KTChannel()
-        return withTimeoutOrNull(9000) {
-            val receive = connectChannel!!.receive()
-            connectChannel!!.close()
-            connectChannel = null
-            receive
-        } ?: MyResult.Error(ClientErrorCode.TIME_OUT)
+            return withTimeoutOrNull(9000) {
+                connectChannel = KTChannel()
+                val receive = connectChannel!!.receive()
+                connectChannel!!.close()
+                connectChannel = null
+                receive
+            } ?: MyResult.Error(ClientErrorCode.TIME_OUT)
+        } catch (e: Exception) {
+            return MyResult.Error(ClientErrorCode.UNKNOWN)
+        }
     }
 
     protected open fun initPipeline(p: ChannelPipeline) {

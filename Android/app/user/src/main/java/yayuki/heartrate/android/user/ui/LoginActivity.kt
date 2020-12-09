@@ -34,8 +34,10 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun startMain() {
-        val intent = Intent("yayuki.hreatrate.action.MAIN")
-        ComponentName(applicationContext, "MainActivity")
+        val intent = Intent()
+        intent.component = ComponentName(
+            applicationContext, "${applicationContext.packageName}.MainActivity"
+        )
         setResult(RESULT_OK)
         startActivity(intent)
     }

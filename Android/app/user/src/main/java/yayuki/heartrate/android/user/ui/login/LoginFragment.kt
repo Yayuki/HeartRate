@@ -38,7 +38,7 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loginViewModel.setHostNamePort("192.168.0.8", 10600)
+        loginViewModel.setHostNamePort("heartrate.yayuki.ml", 10600)
         loginViewModel.loginFormState.observe(viewLifecycleOwner) { it ->
             binding.login.isEnabled = it.isDataValid
             it.usernameError?.let {

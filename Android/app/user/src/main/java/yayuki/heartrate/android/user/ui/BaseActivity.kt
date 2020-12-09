@@ -18,7 +18,6 @@ abstract class BaseActivity : AppCompatActivity() {
         binding.toolbar.title = viewModel.user.name
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
-        viewModel.setHostNamePort("192.168.0.8", 10600)
         viewModel.clientState.observe(this) {
             if (it == ClientState.DISCONNECT && !isShowLogin) {
                 isShowLogin = true
