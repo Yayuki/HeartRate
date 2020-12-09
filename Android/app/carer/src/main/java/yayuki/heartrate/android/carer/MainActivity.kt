@@ -1,4 +1,4 @@
-package yayuki.heartrate.android
+package yayuki.heartrate.android.carer
 
 import android.os.Bundle
 import androidx.activity.viewModels

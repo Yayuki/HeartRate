@@ -6,7 +6,7 @@
         android:name=".CarerApplication"
         android:label="@string/app_name">
         <activity
-            android:name="yayuki.heartrate.android.MainActivity"
+            android:name=".MainActivity"
             android:theme="@style/Theme.Android.NoActionBar">
             <intent-filter>
                 <action android:name="yayuki.hreatrate.action.MAIN" />
