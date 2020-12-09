@@ -8,12 +8,13 @@ import yayuki.heartrate.android.carer.databinding.PatientListItemBinding
 import yayuki.heartrate.carer.data.Patient
 
 class PatientAdapter(
-    private val list: List<Patient>,
+    private var list: List<Patient>,
     private val patientClick: PatientClick
 ) : RecyclerView.Adapter<PatientAdapter.ViewHolder>() {
     private val map: HashMap<Int, Int> = HashMap()
 
     init {
+        list = list.sortedBy { it.user.id }
         list.forEachIndexed { index, patient ->
             map[patient.user.id] = index
         }
