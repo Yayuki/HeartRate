@@ -24,13 +24,15 @@ class LoginActivity : AppCompatActivity() {
             loginViewModel.isLogin
         ) {
             startMain()
+        } else {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+            findViewById<Toolbar>(R.id.toolbar).title = "Login"
+            supportFragmentManager.commitNow {
+                replace(R.id.main_container, LoginFragment())
+            }
         }
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        findViewById<Toolbar>(R.id.toolbar).title = "Login"
-        supportFragmentManager.commitNow {
-            replace(R.id.main_container, LoginFragment())
-        }
+
     }
 
     fun startMain() {
