@@ -1,7 +1,10 @@
 group 'yayuki.heartrate.server'
 
-subprojects {
+allprojects {
     repositories {
+        flatDir {
+            dirs '../../JavaLib/lib/'
+        }
         mavenCentral()
     }
 }
